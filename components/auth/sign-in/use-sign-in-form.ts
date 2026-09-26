@@ -2,11 +2,8 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-// import { authClient } from "@/lib/auth-client"; // مطمئن شوید phoneNumberClient به کلاینت اضافه شده باشد
+import { authClient } from "@/lib/auth-client";
 
-/**
- * منطق فرم ورود با شماره تلفن و رمز عبور
- */
 export function useSignInForm(onSuccess?: () => void) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -15,7 +12,6 @@ export function useSignInForm(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  // --- هدایت کاربر به صفحه نهایی پس از ورود موفق ---
   function handleCompleteFlow() {
     if (onSuccess) {
       onSuccess();
@@ -24,19 +20,10 @@ export function useSignInForm(onSuccess?: () => void) {
     }
   }
 
-  // --- ورود با شماره تلفن و رمز عبور ---
   async function signIn(phone: string, password: string) {
     setServerError(null);
     setLoading(true);
 
-    // --- شبیه‌سازی تستی فرانت‌اند ---
-    console.log("ورود با:", phone, password);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setLoading(false);
-    handleCompleteFlow();
-
-    /*
-    // --- پیاده‌سازی واقعی با Better Auth ---
     try {
       const { data, error } = await authClient.signIn.phoneNumber({
         phoneNumber: phone,
@@ -54,7 +41,6 @@ export function useSignInForm(onSuccess?: () => void) {
     } finally {
       setLoading(false);
     }
-    */
   }
 
   return {

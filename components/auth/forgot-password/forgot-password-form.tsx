@@ -1,12 +1,13 @@
+// forgot-password-form.tsx
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import PhoneStep from "./phone-step";
-import OtpStep from "./otp-step";
-import PasswordStep from "./password-step";
-import { usePhoneAuthFlow, RESEND_DELAY_SECONDS } from "./use-phone-auth-flow";
+import PhoneStep from "../phone-step";
+import OtpStep from "../otp-step";
+import PasswordStep from "../password-step";
+import { useForgotPasswordForm, RESEND_DELAY_SECONDS } from "./use-forgot-password-form";
 
-export default function PhoneAuthFlow() {
+export default function ForgotPasswordForm() {
   const {
     step,
     phone,
@@ -15,17 +16,16 @@ export default function PhoneAuthFlow() {
     serverError,
     verifyOtp,
     resendOtp,
-    isNewUser,
     submitPassword,
-    skipPassword,
     handleChangePhone,
-  } = usePhoneAuthFlow();
+  } = useForgotPasswordForm();
 
   return (
     <Card className="min-w-80 max-w-100 w-full mx-2">
       <CardContent>
         {step === "phone" && (
           <PhoneStep
+            title="بازیابی کلمه عبور"
             defaultValue={phone}
             loading={loading}
             serverError={serverError}
@@ -46,13 +46,7 @@ export default function PhoneAuthFlow() {
         )}
 
         {step === "password" && (
-          <PasswordStep
-            loading={loading}
-            serverError={serverError}
-            onSubmit={submitPassword}
-            onSkip={skipPassword}
-            isNewUser={isNewUser}
-          />
+          <PasswordStep loading={loading} serverError={serverError} onSubmit={submitPassword} />
         )}
       </CardContent>
     </Card>

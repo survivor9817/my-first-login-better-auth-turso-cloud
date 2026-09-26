@@ -21,11 +21,9 @@ interface PasswordStepProps {
   loading: boolean;
   serverError: string | null;
   onSubmit: (password: string) => Promise<void>;
-  onSkip?: () => void; // اصلاح تایپ کالبک اسکیپ
-  isNewUser?: boolean | null; // وضعیت کاربر (جدید یا قدیمی)
 }
 
-function PasswordStep({ loading, serverError, onSubmit, onSkip, isNewUser }: PasswordStepProps) {
+function PasswordStep({ loading, serverError, onSubmit }: PasswordStepProps) {
   const {
     register,
     handleSubmit,
@@ -35,15 +33,11 @@ function PasswordStep({ loading, serverError, onSubmit, onSkip, isNewUser }: Pas
     defaultValues: { password: "", confirmPassword: "" },
   });
 
-  // شرطی‌سازی متون بر اساس وضعیت کاربر
-  const title = isNewUser ? "تعیین کلمه عبور" : "تغییر کلمه عبور";
-  const submitText = isNewUser ? "ثبت رمز عبور" : "بروزرسانی رمز عبور";
-
   return (
     <form onSubmit={handleSubmit((values) => onSubmit(values.password))}>
       <FieldGroup className="gap-4">
         <FieldContent className="flex flex-col justify-center items-center gap-1 text-center">
-          <FieldTitle className="text-2xl font-bold">{title}</FieldTitle>
+          <FieldTitle className="text-2xl font-bold">تعیین کلمه عبور</FieldTitle>
           <FieldDescription>رمز گذاشتن برای ورود بدون پیامک لازمه.</FieldDescription>
         </FieldContent>
 
@@ -79,28 +73,9 @@ function PasswordStep({ loading, serverError, onSubmit, onSkip, isNewUser }: Pas
           <FieldError role="alert" errors={[{ message: serverError }]} className="text-center" />
         )}
 
-        <div className="flex flex-col gap-2 pt-2">
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "در حال ثبت..." : submitText}
-          </Button>
-
-          {/* 
-            دکمه رد شدن فقط زمانی رندر می‌شود که:
-            1. متد onSkip وجود داشته باشد
-            2. کاربر جدید نباشد (!isNewUser)
-          */}
-          {onSkip && !isNewUser && (
-            <Button
-              type="button"
-              variant="ghost"
-              className="w-full text-muted-foreground hover:text-foreground"
-              disabled={loading}
-              onClick={onSkip}
-            >
-              انصراف و ورود به حساب
-            </Button>
-          )}
-        </div>
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "در حال ثبت..." : "ثبت رمز عبور"}
+        </Button>
       </FieldGroup>
     </form>
   );

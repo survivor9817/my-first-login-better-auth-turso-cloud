@@ -8,10 +8,12 @@ import { cn } from "@/lib/utils";
 
 export interface PasswordInputProps extends Omit<React.ComponentProps<typeof Input>, "type"> {
   ref?: React.Ref<HTMLInputElement>;
+  /** آیا رمز از ابتدا نمایان باشد؟ پیش‌فرض: false */
+  defaultVisible?: boolean;
 }
 
-function PasswordInput({ className, ref, ...props }: PasswordInputProps) {
-  const [showPassword, setShowPassword] = React.useState(false);
+function PasswordInput({ className, ref, defaultVisible = false, ...props }: PasswordInputProps) {
+  const [showPassword, setShowPassword] = React.useState(defaultVisible);
 
   return (
     <div className="relative">

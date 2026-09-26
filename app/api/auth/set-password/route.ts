@@ -8,12 +8,19 @@ const MAX_SESSION_AGE_MS = 2 * 60 * 1000;
 
 export async function POST(req: Request) {
   try {
-    const { password } = await req.json();
+    const { newPassword } = await req.json();
 
-    if (!password || password.length < 6) {
+    if (!newPassword || newPassword.length < 6) {
       // پیام مبهم: نگوییم "رمز کوتاه است"، بگوییم درخواست نامعتبر است
       return NextResponse.json({ message: "درخواست نامعتبر است." }, { status: 400 });
     }
+
+    // // ۱. type-safety بیشتر روی ورودی
+    // const { newPassword } = await req.json();
+
+    // if (typeof newPassword !== "string" || newPassword.length < 6) {
+    //   return NextResponse.json({ message: "درخواست نامعتبر است." }, { status: 400 });
+    // }
 
     const reqHeaders = await headers();
 
@@ -40,7 +47,7 @@ export async function POST(req: Request) {
     // ۳. استفاده از API رسمی Better Auth برای تنظیم/تغییر رمز
     // این متد به طور خودکار تشخیص می‌دهد که آیا باید رکورد جدید بسازد یا قبلی را آپدیت کند
     await auth.api.setPassword({
-      body: { newPassword: password },
+      body: { newPassword: newPassword },
       headers: reqHeaders,
     });
 
@@ -54,56 +61,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "خطا در پردازش درخواست." }, { status: 400 });
   }
 }
-
-// import { betterAuth } from "better-auth";
-// import { phoneNumber } from "better-auth/plugins";
-
-// lib/auth.ts
-// export const auth = betterAuth({
-//   rateLimit: {
-//     enabled: true,
-//     window: 60, // پنجره زمانی بر حسب ثانیه (مثلاً ۶۰ ثانیه)
-//     max: 1, // در هر ۶۰ ثانیه حداکثر ۱ بار اجازه ارسال بده
-//     customRules: {
-//       // اعمال محدودیت اختصاصی برای اندپوینت ارسال پیامک
-//       "/phone-number/send-otp": {
-//         window: 60, // هر ۶۰ ثانیه
-//         max: 1, // فقط ۱ درخواست برای هر کاربر/IP
-//       },
-//     },
-//   },
-//   session: {
-//     freshAge: 60 * 2, // دو دقیقه
-//   },
-//   plugins: [
-//     phoneNumber({
-//       otpLength: 6,
-//       expiresIn: 120, // کد بعد از ۲ دقیقه (۱۲۰ ثانیه) منقضی می‌شود
-//       sendOTP: async ({ phoneNumber, code }, request) => {
-//         await sendSms(phoneNumber, code);
-//       },
-//     }),
-//   ],
-// });
-
-// // lib/auth.ts
-// import { betterAuth } from "better-auth";
-// import { phoneNumber } from "better-auth/plugins";
-
-// export const auth = betterAuth({
-//   emailAndPassword: {
-//     enabled: true,
-//   },
-//   plugins: [
-//     phoneNumber({
-//       sendOTP: async ({ phoneNumber, code }) => {
-//         // ارسال پیامک
-//       },
-//       // این گزینه جادوی کار شماست:
-//       signUpOnVerification: {
-//         getTempEmail: (phoneNumber) => `${phoneNumber.replace(/\+/g, "")}@temp.local`,
-//         getTempName: (phoneNumber) => `User ${phoneNumber}`,
-//       }
-//     }),
-//   ],
-// });

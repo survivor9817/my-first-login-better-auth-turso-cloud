@@ -20,13 +20,22 @@ import { PhoneInput } from "./phone-input";
 import { cn } from "cn";
 
 interface PhoneStepProps {
+  title: string; // 👈 اضافه شد
+  description?: string; // 👈 اختیاری (پیشنهاد می‌کنم description رو هم بیرون بگیری)
   defaultValue?: string;
   loading: boolean;
   serverError: string | null;
   onSubmit: (phone: string) => Promise<void>;
 }
 
-const PhoneStep = ({ defaultValue = "", loading, serverError, onSubmit }: PhoneStepProps) => {
+const PhoneStep = ({
+  title,
+  description = "شماره موبایلت رو وارد کن تا کد تأیید برات پیامک بشه.",
+  defaultValue = "",
+  loading,
+  serverError,
+  onSubmit,
+}: PhoneStepProps) => {
   const {
     register,
     handleSubmit,
@@ -40,8 +49,8 @@ const PhoneStep = ({ defaultValue = "", loading, serverError, onSubmit }: PhoneS
     <form onSubmit={handleSubmit((values) => onSubmit(values.phone))}>
       <FieldGroup className="gap-4">
         <FieldContent className="flex justify-center items-center gap-4">
-          <FieldTitle className="text-2xl font-bold">ثبت نام یا ورود با پیامک</FieldTitle>
-          <FieldDescription>شماره موبایلت رو وارد کن تا کد تأیید برات پیامک بشه.</FieldDescription>
+          <FieldTitle className="text-2xl font-bold">{title}</FieldTitle>
+          <FieldDescription>{description}</FieldDescription>
         </FieldContent>
 
         <Field data-invalid={!!errors.phone}>

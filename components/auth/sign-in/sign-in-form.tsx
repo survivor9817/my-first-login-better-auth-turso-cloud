@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { PasswordInput } from "./password-input";
-import { PhoneInput } from "./phone-input";
+import { PasswordInput } from "../password-input";
+import { PhoneInput } from "../phone-input";
 
-import { signInSchema, type SignInValues } from "./schemas";
+import { signInSchema, type SignInValues } from "../schemas";
 import { useSignInForm } from "./use-sign-in-form";
 
 const SignInForm = () => {
