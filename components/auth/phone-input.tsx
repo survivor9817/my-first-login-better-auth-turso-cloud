@@ -11,7 +11,7 @@ export interface PhoneInputProps extends Omit<
   ref?: React.Ref<HTMLInputElement>;
 }
 
-function PhoneInput({ className, ref, ...props }: PhoneInputProps) {
+const PhoneInput = ({ className, ref, ...props }: PhoneInputProps) => {
   return (
     <div className="relative">
       <PhoneIcon
@@ -29,6 +29,6 @@ function PhoneInput({ className, ref, ...props }: PhoneInputProps) {
       />
     </div>
   );
-}
+};
 
-export { PhoneInput };
+export default PhoneInput;

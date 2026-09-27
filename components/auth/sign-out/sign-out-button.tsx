@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 
-export function SignOutButton() {
+const SignOutButton = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -32,4 +32,6 @@ export function SignOutButton() {
       {loading ? "در حال خروج..." : "خروج از حساب"}
     </Button>
   );
-}
+};
+
+export default SignOutButton;

@@ -10,12 +10,7 @@ interface ResendOtpProps {
   onResend: () => Promise<void>;
 }
 
-/**
- * این تایمر فقط UX هست، نه enforcement واقعی.
- * Better Auth مقدار اعتبار/زمان مجاز resend رو در پاسخ sendOtp برنمی‌گردونه،
- * پس محدودیت واقعی (rate limit) باید سمت سرور جدا پیاده بشه.
- */
-function ResendOtp({ resendDelay, loading, onResend }: ResendOtpProps) {
+const ResendOtp = ({ resendDelay, loading, onResend }: ResendOtpProps) => {
   const [timeLeft, { startCountdown, resetCountdown }] = useCountdown({
     countStart: resendDelay,
     countStop: 0,
@@ -49,6 +44,6 @@ function ResendOtp({ resendDelay, loading, onResend }: ResendOtpProps) {
       ارسال دوباره کد تأیید
     </button>
   );
-}
+};
 
 export default ResendOtp;

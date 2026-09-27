@@ -1,6 +1,4 @@
-// use-phone-auth-flow.ts
 "use client";
-
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -9,7 +7,7 @@ export type PhoneAuthStep = "phone" | "otp" | "password";
 
 export const RESEND_DELAY_SECONDS = 60;
 
-export function useSignUpForm(onSuccess?: () => void) {
+export const useSignUpForm = (onSuccess?: () => void) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
@@ -19,25 +17,25 @@ export function useSignUpForm(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  function handleChangePhone() {
+  const handleChangePhone = () => {
     setServerError(null);
     setLoading(false);
     setStep("phone");
-  }
+  };
 
-  function handleCompleteFlow() {
+  const handleCompleteFlow = () => {
     if (onSuccess) {
       onSuccess();
     } else {
       router.push(callbackUrl);
     }
-  }
+  };
 
-  function skipPassword() {
+  const skipPassword = () => {
     handleCompleteFlow();
-  }
+  };
 
-  async function requestOtp(phoneValue: string) {
+  const requestOtp = async (phoneValue: string) => {
     setServerError(null);
     setLoading(true);
     setPhone(phoneValue);
@@ -58,10 +56,9 @@ export function useSignUpForm(onSuccess?: () => void) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  // مرحله ۲: تایید OTP و بررسی این‌که کاربر رمز عبور دارد یا نه
-  async function verifyOtp(otpValue: string) {
+  const verifyOtp = async (otpValue: string) => {
     setServerError(null);
     setLoading(true);
 
@@ -76,7 +73,6 @@ export function useSignUpForm(onSuccess?: () => void) {
         return;
       }
 
-      // سشن ساخته شد؛ حالا بررسی می‌کنیم آیا اکانت credential (رمز عبور) دارد یا نه
       const { data: accounts, error: accountsError } = await authClient.listAccounts();
 
       if (accountsError) {
@@ -87,7 +83,6 @@ export function useSignUpForm(onSuccess?: () => void) {
       const hasPassword = accounts?.some((account) => account.providerId === "credential");
 
       if (hasPassword) {
-        // کاربر از قبل رمز دارد → لاگین کامل شد، مستقیم ری‌دایرکت شود
         handleCompleteFlow();
       } else {
         setStep("password");
@@ -97,9 +92,9 @@ export function useSignUpForm(onSuccess?: () => void) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function resendOtp() {
+  const resendOtp = async () => {
     setServerError(null);
     try {
       const { error } = await authClient.phoneNumber.sendOtp({
@@ -111,10 +106,9 @@ export function useSignUpForm(onSuccess?: () => void) {
     } catch (err: any) {
       setServerError(err?.message || "خطای ارتباط با سرور.");
     }
-  }
+  };
 
-  // مرحله ۳: تعیین رمز عبور برای کاربری که سشن‌دار است ولی اکانت credential ندارد
-  async function submitPassword(password: string) {
+  const submitPassword = async (password: string) => {
     setServerError(null);
     setLoading(true);
 
@@ -137,7 +131,7 @@ export function useSignUpForm(onSuccess?: () => void) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return {
     step,
@@ -151,4 +145,4 @@ export function useSignUpForm(onSuccess?: () => void) {
     skipPassword,
     handleChangePhone,
   };
-}
+};

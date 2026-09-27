@@ -1,9 +1,7 @@
 "use client";
-
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -15,9 +13,9 @@ import {
   FieldTitle,
 } from "@/components/ui/field";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-
 import { otpSchema, type OtpValues } from "./schemas";
 import { useCountdown } from "@/hooks/use-countdown";
+import ResendOtp from "./resend-otp";
 
 interface OtpStepProps {
   phone: string;
@@ -29,7 +27,7 @@ interface OtpStepProps {
   onChangePhone: () => void;
 }
 
-function OtpStep({
+const OtpStep = ({
   phone,
   resendDelay,
   loading,
@@ -37,28 +35,11 @@ function OtpStep({
   onVerify,
   onResend,
   onChangePhone,
-}: OtpStepProps) {
-  const [timeLeft, { startCountdown, resetCountdown }] = useCountdown({
-    countStart: resendDelay,
-    countStop: 0,
-    intervalMs: 1000,
-  });
-
+}: OtpStepProps) => {
   const { control, handleSubmit } = useForm<OtpValues>({
     resolver: zodResolver(otpSchema),
     defaultValues: { otp: "" },
   });
-
-  React.useEffect(() => {
-    startCountdown();
-  }, [startCountdown]);
-
-  const handleResend = async () => {
-    if (timeLeft > 0) return;
-    await onResend();
-    resetCountdown();
-    startCountdown();
-  };
 
   return (
     <form onSubmit={handleSubmit((values) => onVerify(values.otp))}>
@@ -105,20 +86,7 @@ function OtpStep({
         </Button>
 
         <div className="text-center text-sm space-y-2">
-          {timeLeft > 0 ? (
-            <span className="text-muted-foreground block">
-              ارسال دوباره تا {timeLeft} ثانیه دیگر
-            </span>
-          ) : (
-            <button
-              type="button"
-              onClick={handleResend}
-              disabled={loading}
-              className="text-primary font-bold underline underline-offset-2 block mx-auto"
-            >
-              ارسال مجدد کد
-            </button>
-          )}
+          <ResendOtp resendDelay={resendDelay} loading={loading} onResend={onResend} />
 
           <p className="text-muted-foreground mt-4">
             شماره رو اشتباه وارد کردی؟{" "}
@@ -134,6 +102,6 @@ function OtpStep({
       </FieldGroup>
     </form>
   );
-}
+};
 
 export default OtpStep;

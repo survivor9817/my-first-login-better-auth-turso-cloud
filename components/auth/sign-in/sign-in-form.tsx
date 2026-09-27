@@ -1,9 +1,7 @@
 "use client";
-
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   Card,
   CardContent,
@@ -14,11 +12,11 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { PasswordInput } from "../password-input";
-import { PhoneInput } from "../phone-input";
-
+import PasswordInput from "../password-input";
+import PhoneInput from "../phone-input";
 import { signInSchema, type SignInValues } from "../schemas";
 import { useSignInForm } from "./use-sign-in-form";
+import ForgotPasswordLink from "../forgot-password-link";
 
 const SignInForm = () => {
   const { loading, serverError, signIn } = useSignInForm();
@@ -106,17 +104,7 @@ const SignInForm = () => {
           {loading ? "در حال ورود..." : "ورود"}
         </Button>
 
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-sm text-muted-foreground">رمز عبورت یادت رفته؟</span>
-          <Button
-            render={<Link href="/forgot-password" />}
-            nativeButton={false}
-            variant="link"
-            className="h-auto p-0 text-sm font-bold underline underline-offset-2"
-          >
-            ورود سریع با پیامک
-          </Button>
-        </div>
+        <ForgotPasswordLink />
       </CardFooter>
     </Card>
   );

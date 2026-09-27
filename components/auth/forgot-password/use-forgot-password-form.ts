@@ -1,6 +1,5 @@
 // use-forgot-password-flow.ts
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -9,7 +8,7 @@ export type ForgotPasswordStep = "phone" | "otp" | "password";
 
 export const RESEND_DELAY_SECONDS = 60;
 
-export function useForgotPasswordForm(onSuccess?: () => void) {
+export const useForgotPasswordForm = (onSuccess?: () => void) => {
   const router = useRouter();
 
   const [step, setStep] = useState<ForgotPasswordStep>("phone");
@@ -18,23 +17,22 @@ export function useForgotPasswordForm(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  function handleChangePhone() {
+  const handleChangePhone = () => {
     setServerError(null);
     setLoading(false);
     setOtp("");
     setStep("phone");
-  }
+  };
 
-  function handleCompleteFlow() {
+  const handleCompleteFlow = () => {
     if (onSuccess) {
       onSuccess();
     } else {
       router.push("/login");
     }
-  }
+  };
 
-  // مرحله ۱: ارسال کد بازیابی رمز
-  async function requestOtp(phoneValue: string) {
+  const requestOtp = async (phoneValue: string) => {
     setServerError(null);
     setLoading(true);
     setPhone(phoneValue);
@@ -55,32 +53,30 @@ export function useForgotPasswordForm(onSuccess?: () => void) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  // مرحله ۲: در این پلاگین اعتبارسنجی مستقل OTP برای ریست رمز وجود ندارد؛
-  // کد فقط محلی ذخیره می‌شود و اعتبارسنجی‌اش همراه رمز جدید در resetPassword انجام می‌شود
-  async function verifyOtp(otpValue: string) {
+  const verifyOtp = async (otpValue: string) => {
     setServerError(null);
     setOtp(otpValue);
     setStep("password");
-  }
+  };
 
-  async function resendOtp() {
+  const resendOtp = async () => {
     setServerError(null);
     try {
       const { error } = await authClient.phoneNumber.requestPasswordReset({
         phoneNumber: phone,
       });
+
       if (error) {
         setServerError(error.message || "خطا در ارسال مجدد کد.");
       }
     } catch (err: any) {
       setServerError(err?.message || "خطای ارتباط با سرور.");
     }
-  }
+  };
 
-  // مرحله ۳: تعیین رمز جدید (شامل اعتبارسنجی واقعی OTP)
-  async function submitPassword(newPassword: string) {
+  const submitPassword = async (newPassword: string) => {
     setServerError(null);
     setLoading(true);
 
@@ -103,7 +99,7 @@ export function useForgotPasswordForm(onSuccess?: () => void) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return {
     step,
@@ -116,4 +112,4 @@ export function useForgotPasswordForm(onSuccess?: () => void) {
     submitPassword,
     handleChangePhone,
   };
-}
+};

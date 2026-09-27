@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/field";
 
 import { passwordSchema, type PasswordValues } from "./schemas";
-import { PasswordInput } from "./password-input";
+import PasswordInput from "./password-input";
 
 interface PasswordStepProps {
   loading: boolean;
@@ -23,7 +23,7 @@ interface PasswordStepProps {
   onSubmit: (password: string) => Promise<void>;
 }
 
-function PasswordStep({ loading, serverError, onSubmit }: PasswordStepProps) {
+const PasswordStep = ({ loading, serverError, onSubmit }: PasswordStepProps) => {
   const {
     register,
     handleSubmit,
@@ -79,6 +79,6 @@ function PasswordStep({ loading, serverError, onSubmit }: PasswordStepProps) {
       </FieldGroup>
     </form>
   );
-}
+};
 
 export default PasswordStep;

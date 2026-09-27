@@ -1,13 +1,11 @@
-// forgot-password-form.tsx
 "use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import PhoneStep from "../phone-step";
 import OtpStep from "../otp-step";
 import PasswordStep from "../password-step";
 import { useForgotPasswordForm, RESEND_DELAY_SECONDS } from "./use-forgot-password-form";
 
-export default function ForgotPasswordForm() {
+const ForgotPasswordForm = () => {
   const {
     step,
     phone,
@@ -51,4 +49,6 @@ export default function ForgotPasswordForm() {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default ForgotPasswordForm;

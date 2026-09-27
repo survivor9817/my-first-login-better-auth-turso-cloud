@@ -1,9 +1,7 @@
 "use client";
-
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Field,
@@ -14,9 +12,8 @@ import {
   FieldLabel,
   FieldTitle,
 } from "@/components/ui/field";
-
 import { phoneSchema, type PhoneValues } from "./schemas";
-import { PhoneInput } from "./phone-input";
+import PhoneInput from "./phone-input";
 import { cn } from "cn";
 
 interface PhoneStepProps {

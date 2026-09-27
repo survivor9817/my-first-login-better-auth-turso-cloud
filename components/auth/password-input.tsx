@@ -8,11 +8,15 @@ import { cn } from "@/lib/utils";
 
 export interface PasswordInputProps extends Omit<React.ComponentProps<typeof Input>, "type"> {
   ref?: React.Ref<HTMLInputElement>;
-  /** آیا رمز از ابتدا نمایان باشد؟ پیش‌فرض: false */
   defaultVisible?: boolean;
 }
-
-function PasswordInput({ className, ref, defaultVisible = false, ...props }: PasswordInputProps) {
+// کانتینر یا فیلد باید راست‌چین (rtl) باشد، اما خود ورودی پسورد بهتر است dir="ltr" یا متغیر باشد تا تایپ رمز عبور استاندارد بماند.
+const PasswordInput = ({
+  className,
+  ref,
+  defaultVisible = false,
+  ...props
+}: PasswordInputProps) => {
   const [showPassword, setShowPassword] = React.useState(defaultVisible);
 
   return (
@@ -43,6 +47,6 @@ function PasswordInput({ className, ref, defaultVisible = false, ...props }: Pas
       </button>
     </div>
   );
-}
+};
 
-export { PasswordInput };
+export default PasswordInput;
