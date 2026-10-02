@@ -5,6 +5,9 @@ import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  // فیلدهای نام و نام خانوادگی برای ثبت مشخصات اولیه:
+  firstName: text("first_name"),
+  lastName: text("last_name"),
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
   image: text("image"),

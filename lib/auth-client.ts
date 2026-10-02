@@ -1,8 +1,9 @@
 import { createAuthClient } from "better-auth/react";
-import { phoneNumberClient } from "better-auth/client/plugins";
+import { inferAdditionalFields, phoneNumberClient } from "better-auth/client/plugins";
+import type { auth } from "./auth"; // ✅ استفاده از type برای جلوگیری از نشت کدهای سرور
 
 export const authClient = createAuthClient({
-  plugins: [phoneNumberClient()],
+  plugins: [phoneNumberClient(), inferAdditionalFields<typeof auth>()],
 });
 
 export const { signIn, signUp, signOut, useSession } = authClient;

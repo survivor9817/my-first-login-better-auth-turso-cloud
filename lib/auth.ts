@@ -18,10 +18,19 @@ export const auth = betterAuth({
     enabled: true,
   },
 
+  user: {
+    additionalFields: {
+      firstName: { type: "string", required: false, input: true },
+      lastName: { type: "string", required: false, input: true },
+      //     userType: { type: "string", required: false, input: true },
+      //     userGrade: { type: "string", required: false, input: true },
+    },
+  },
+
   rateLimit: {
     enabled: true,
-    window: 60, // پنجره زمانی بر حسب ثانیه (مثلاً ۶۰ ثانیه)
-    max: 1, // در هر ۶۰ ثانیه حداکثر ۱ بار اجازه ارسال بده
+    // window: 60, // پنجره زمانی بر حسب ثانیه (مثلاً ۶۰ ثانیه)
+    // max: 1, // در هر ۶۰ ثانیه حداکثر ۱ بار اجازه ارسال بده
     customRules: {
       // اعمال محدودیت اختصاصی برای اندپوینت ارسال پیامک
       "/phone-number/send-otp": {
