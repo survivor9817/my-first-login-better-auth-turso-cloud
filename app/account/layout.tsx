@@ -11,7 +11,7 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
   return (
     <div className="flex items-center justify-center w-full">
       {/* max-w-240 */}
-      <div className="min-h-screen flex-1 bg-background text-foreground flex flex-col md:flex-col max-w-240">
+      <div className="min-h-screen flex-1 bg-background text-foreground flex flex-col md:flex-col">
         <AccountHeader onMenuToggle={() => setIsSidebarOpen(true)} />
 
         <div className="flex-1 flex flex-row min-w-0">

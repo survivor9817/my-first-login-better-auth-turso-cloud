@@ -23,6 +23,7 @@ const mainNavItems = [
   { title: "اطلاعات فردی", href: "/account/profile", icon: User },
   { title: "امنیت حساب", href: "/account/security", icon: ShieldCheck },
   { title: "اشتراک کاربری", href: "/account/billing", icon: CreditCard },
+  { title: "خرید اشتراک", href: "/account/subscriptions", icon: CreditCard },
 ];
 
 const secondaryNavItems = [

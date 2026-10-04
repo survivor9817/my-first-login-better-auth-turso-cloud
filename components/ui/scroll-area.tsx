@@ -1,27 +1,48 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
+import * as React from "react"
 
-import { cn } from "@/lib/utils";
+import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area"
 
-function ScrollArea({ className, children, ...props }: ScrollAreaPrimitive.Root.Props) {
+import { cn } from "@/lib/utils"
+
+function ScrollArea({
+  className,
+  children,
+  scrollbarOrientation = "vertical",
+  viewportRef,
+  ...props
+}: ScrollAreaPrimitive.Root.Props & {
+  scrollbarOrientation?: ScrollAreaPrimitive.Scrollbar.Props["orientation"]
+  /**
+   * Ref to the underlying scrollable viewport element. Useful for consumers
+   * that need direct access to the native scroll container, e.g. to drive a
+   * virtualizer (react-virtuoso's `customScrollParent`).
+   */
+  viewportRef?: React.Ref<HTMLDivElement>
+}) {
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
-      className={cn("relative", className)}
+      className={cn("relative flex flex-col", className)}
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
+        ref={viewportRef}
         data-slot="scroll-area-viewport"
-        className="size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1"
+        // Safe to apply unconditionally: scroll-fade shows nothing when the
+        // content doesn't overflow, so every ScrollArea gets the effect for
+        // free without needing to check per-usage whether it scrolls.
+        className="min-h-0 flex-1 scroll-fade-y overscroll-x-contain rounded-[inherit] outline-none"
       >
-        {children}
+        <ScrollAreaPrimitive.Content data-slot="scroll-area-content">
+          {children}
+        </ScrollAreaPrimitive.Content>
       </ScrollAreaPrimitive.Viewport>
-      <ScrollBar />
+      <ScrollBar orientation={scrollbarOrientation} />
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
-  );
+  )
 }
 
 function ScrollBar({
@@ -32,11 +53,14 @@ function ScrollBar({
   return (
     <ScrollAreaPrimitive.Scrollbar
       data-slot="scroll-area-scrollbar"
-      data-orientation={orientation}
       orientation={orientation}
       className={cn(
-        "flex touch-none p-px transition-colors select-none data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-s data-vertical:border-s-transparent",
-        className,
+        "flex touch-none p-px transition-colors select-none",
+        orientation === "vertical" &&
+          "h-full w-2 border-s border-s-transparent",
+        orientation === "horizontal" &&
+          "h-2 flex-col border-t border-t-transparent",
+        className
       )}
       {...props}
     >
@@ -45,7 +69,7 @@ function ScrollBar({
         className="relative flex-1 rounded-full bg-border"
       />
     </ScrollAreaPrimitive.Scrollbar>
-  );
+  )
 }
 
-export { ScrollArea, ScrollBar };
+export { ScrollArea, ScrollBar }

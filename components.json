@@ -21,5 +21,8 @@
   },
   "menuColor": "default",
   "menuAccent": "subtle",
-  "registries": {}
+  "registries": {
+    "@diceui": "https://diceui.com/r/{style}/{name}.json",
+    "@persianlabsui": "https://ui.persian-labs.ir/r/{name}.json"
+  }
 }
